@@ -1,5 +1,6 @@
 {
 	"name": "yaml-path-extractor",
+	"publisher": "jtcontreras90",
 	"displayName": "Yaml Path Extractor",
 	"description": "Extracts the path to a YAML key",
 	"version": "0.0.1",
