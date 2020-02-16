@@ -17,9 +17,19 @@
 		"commands": [
 			{
 				"command": "extension.extractKey",
-				"title": "Extract Key"
+				"title": "Extract Key",
+				"when": "editorLangId == yaml"
 			}
-		]
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "extension.extractKey",
+					"title": "Extract Key",
+					"when": "editorLangId == yaml"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -41,5 +51,9 @@
 		"mocha": "^7.0.1",
 		"typescript": "^3.7.5",
 		"vscode-test": "^1.3.0"
+	},
+	"dependencies": {
+		"@types/clipboardy": "^1.1.0",
+		"clipboardy": "^1.2.3"
 	}
 }
