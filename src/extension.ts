@@ -24,8 +24,8 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 		const document = editor.document;
-		const selection = editor.selection;
-		const extractor = new yamlKeyExtractor(document, selection);
+		const position = editor.selection.active;
+		const extractor = new yamlKeyExtractor(document, position);
 		await extractor.extractYamlKey();
 		let fullPath = extractor.fullPath();
 		clipboardy.writeSync(fullPath);

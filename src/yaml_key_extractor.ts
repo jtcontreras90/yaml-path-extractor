@@ -1,14 +1,14 @@
-import { TextDocument, Selection } from 'vscode';
+import { TextDocument, Position } from 'vscode';
 import * as vscode from 'vscode';
 
 export class yamlKeyExtractor {
   private document: TextDocument;
-  private selection: Selection;
+  private position: Position;
   private extractedSymbols: Array<string>;
 
-  constructor(document: TextDocument, selection: Selection) {
+  constructor(document: TextDocument, position: Position) {
     this.document = document;
-    this.selection = selection;
+    this.position = position;
     this.extractedSymbols = [];
   }
 
@@ -32,7 +32,7 @@ export class yamlKeyExtractor {
 
   private cursorSimbols(symbols: vscode.DocumentSymbol[]) {
     for (const symbol of symbols) {
-      if (!symbol.range.contains(this.selection.active)) {
+      if (!symbol.range.contains(this.position)) {
         continue;
       }
 
@@ -50,13 +50,13 @@ export class yamlKeyExtractor {
   }
 
   private shouldAddSymbol(symbol: vscode.DocumentSymbol): boolean {
-    if (vscode.workspace.getConfiguration('yaml-path-extractor')
-      .get<boolean>('yamlPathExtractor.ignoreFilenameRoot') !== true) {
+    if (vscode.workspace.getConfiguration()
+      .get('yamlPathExtractor.ignoreFilenameRoot') !== true) {
       return true;
     }
-
     let fileName = this.document.fileName;
-    return this.extractedSymbols.length > 0 &&
+    fileName = fileName.substr(fileName.lastIndexOf('/') + 1)
+    return this.extractedSymbols.length > 0 ||
       symbol.name !== fileName.substr(0, fileName.lastIndexOf('.'));
   }
 }
