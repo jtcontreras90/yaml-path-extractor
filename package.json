@@ -14,6 +14,27 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"configuration":{
+			"title": "Yaml Path Extractor",
+			"properties": {
+				"yamlPathExtractor.pathSeparator":{
+					"type": "string",
+					"default": ".",
+					"markdownDescription": "String used to separate the path parts. For example, 'path **.** to **.** your **.** key'"
+				},
+				"yamlPathExtractor.ignoreFilenameRoot":{
+					"type": "boolean",
+					"default": true,
+					"enum": [true, false],
+					"markdownDescription": "Ignore the root key if it matches the file name. This is usefull for I18n on Ruby on Rails.",
+					"enumDescriptions": [
+						"Ignore the root key if it matches the file name. Example: /en.yml -> en: key: value -> key.value",
+						"Don't ignore the root key if it matches the file name. Example: /en.yml -> en: key: value -> en.key.value"
+					]
+
+				}
+			}
+		},
 		"commands": [
 			{
 				"command": "extension.extractKey",
@@ -26,6 +47,7 @@
 				{
 					"command": "extension.extractKey",
 					"title": "Extract Key",
+					"group": "yamlExtractor",
 					"when": "editorLangId == yaml"
 				}
 			]
