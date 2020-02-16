@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as clipboardy from 'clipboardy';
-import yamlKeyExtraction from './yaml_key_extractor';
+import { yamlKeyExtractor } from './yaml_key_extractor';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -15,18 +15,21 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.extractKey', () => {
+	let disposable = vscode.commands.registerCommand('extension.extractKey', async () => {
 		// The code you place here will be executed every time your command is executed
 
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			return;
 		}
 		const document = editor.document;
 		const selection = editor.selection;
-		const ref = yamlKeyExtraction(document, selection);
+		const extractor = new yamlKeyExtractor(document, selection);
+		await extractor.extractYamlKey();
+		let fullPath = extractor.fullPath();
+		clipboardy.writeSync(fullPath);
+		vscode.window.showInformationMessage(`'${fullPath}' copied to your clipboard`);
 	});
 
 	context.subscriptions.push(disposable);
