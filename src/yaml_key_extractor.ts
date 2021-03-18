@@ -1,15 +1,23 @@
 import { TextDocument, Position } from 'vscode';
 import * as vscode from 'vscode';
 
-export class yamlKeyExtractor {
+export class YamlKeyExtractor {
   private document: TextDocument;
   private position: Position;
   private extractedSymbols: Array<string>;
+  private fileName: string;
 
   constructor(document: TextDocument, position: Position) {
     this.document = document;
     this.position = position;
     this.extractedSymbols = [];
+    this.fileName = this.getFilename();
+  }
+
+  private getFilename() {
+    let fileName = this.document.fileName;
+    fileName = fileName.substr(fileName.lastIndexOf('/') + 1);
+    return fileName.substr(0, fileName.lastIndexOf('.'));
   }
 
   async extractYamlKey(){
@@ -26,7 +34,11 @@ export class yamlKeyExtractor {
 
   fullPath(): string {
     const separator = vscode.workspace.getConfiguration()
-      .get('yamlPathExtractor.pathSeparator') as string
+      .get('yamlPathExtractor.pathSeparator') as string;
+    if (vscode.workspace.getConfiguration()
+      .get('yamlPathExtractor.includeFilename')) {
+      this.extractedSymbols.unshift(this.fileName);
+    }
     return this.extractedSymbols.join(separator);
   }
 
@@ -37,14 +49,14 @@ export class yamlKeyExtractor {
       }
 
       if (this.shouldAddSymbol(symbol)) {
-        this.extractedSymbols.push(symbol.name)
+        this.extractedSymbols.push(symbol.name);
       }
 
       if (!symbol.children) {
         return;
       }
 
-      this.cursorSimbols(symbol.children)
+      this.cursorSimbols(symbol.children);
     }
     return;
   }
@@ -54,9 +66,7 @@ export class yamlKeyExtractor {
       .get('yamlPathExtractor.ignoreFilenameRoot') !== true) {
       return true;
     }
-    let fileName = this.document.fileName;
-    fileName = fileName.substr(fileName.lastIndexOf('/') + 1)
     return this.extractedSymbols.length > 0 ||
-      symbol.name !== fileName.substr(0, fileName.lastIndexOf('.'));
+      symbol.name !== this.fileName;
   }
 }
