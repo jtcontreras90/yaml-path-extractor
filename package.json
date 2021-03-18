@@ -35,6 +35,15 @@
 						"Ignore the root key if it matches the file name. Example: /en.yml -> en: key: value -> key.value",
 						"Don't ignore the root key if it matches the file name. Example: /en.yml -> en: key: value -> en.key.value"
 					]
+				},
+				"yamlPathExtractor.includeFilename": {
+					"type": "boolean",
+					"default": false,
+					"enum": [
+						true,
+						false
+					],
+					"markdownDescription": "Include the yaml file's name as first step in the path."
 				}
 			}
 		},

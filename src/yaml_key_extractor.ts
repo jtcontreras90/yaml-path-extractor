@@ -35,6 +35,10 @@ export class YamlKeyExtractor {
   fullPath(): string {
     const separator = vscode.workspace.getConfiguration()
       .get('yamlPathExtractor.pathSeparator') as string;
+    if (vscode.workspace.getConfiguration()
+      .get('yamlPathExtractor.includeFilename')) {
+      this.extractedSymbols.unshift(this.fileName);
+    }
     return this.extractedSymbols.join(separator);
   }
 
@@ -62,8 +66,6 @@ export class YamlKeyExtractor {
       .get('yamlPathExtractor.ignoreFilenameRoot') !== true) {
       return true;
     }
-    let fileName = this.document.fileName;
-    fileName = fileName.substr(fileName.lastIndexOf('/') + 1);
     return this.extractedSymbols.length > 0 ||
       symbol.name !== this.fileName;
   }
