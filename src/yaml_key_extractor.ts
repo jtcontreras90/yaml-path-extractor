@@ -5,11 +5,19 @@ export class YamlKeyExtractor {
   private document: TextDocument;
   private position: Position;
   private extractedSymbols: Array<string>;
+  private fileName: string;
 
   constructor(document: TextDocument, position: Position) {
     this.document = document;
     this.position = position;
     this.extractedSymbols = [];
+    this.fileName = this.getFilename();
+  }
+
+  private getFilename() {
+    let fileName = this.document.fileName;
+    fileName = fileName.substr(fileName.lastIndexOf('/') + 1);
+    return fileName.substr(0, fileName.lastIndexOf('.'));
   }
 
   async extractYamlKey(){
@@ -57,6 +65,6 @@ export class YamlKeyExtractor {
     let fileName = this.document.fileName;
     fileName = fileName.substr(fileName.lastIndexOf('/') + 1);
     return this.extractedSymbols.length > 0 ||
-      symbol.name !== fileName.substr(0, fileName.lastIndexOf('.'));
+      symbol.name !== this.fileName;
   }
 }
