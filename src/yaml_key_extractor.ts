@@ -1,7 +1,7 @@
 import { TextDocument, Position } from 'vscode';
 import * as vscode from 'vscode';
 
-export class yamlKeyExtractor {
+export class YamlKeyExtractor {
   private document: TextDocument;
   private position: Position;
   private extractedSymbols: Array<string>;
@@ -20,31 +20,31 @@ export class yamlKeyExtractor {
       return;
     }
 
-    this.cursorSimbols(symbols);
+    this.cursorSymbols(symbols);
     return;
   }
 
   fullPath(): string {
     const separator = vscode.workspace.getConfiguration()
-      .get('yamlPathExtractor.pathSeparator') as string
+      .get('yamlPathExtractor.pathSeparator') as string;
     return this.extractedSymbols.join(separator);
   }
 
-  private cursorSimbols(symbols: vscode.DocumentSymbol[]) {
+  private cursorSymbols(symbols: vscode.DocumentSymbol[]) {
     for (const symbol of symbols) {
       if (!symbol.range.contains(this.position)) {
         continue;
       }
 
       if (this.shouldAddSymbol(symbol)) {
-        this.extractedSymbols.push(symbol.name)
+        this.extractedSymbols.push(symbol.name);
       }
 
       if (!symbol.children) {
         return;
       }
 
-      this.cursorSimbols(symbol.children)
+      this.cursorSymbols(symbol.children);
     }
     return;
   }
@@ -55,8 +55,8 @@ export class yamlKeyExtractor {
       return true;
     }
     let fileName = this.document.fileName;
-    fileName = fileName.substr(fileName.lastIndexOf('/') + 1)
+    fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
     return this.extractedSymbols.length > 0 ||
-      symbol.name !== fileName.substr(0, fileName.lastIndexOf('.'));
+      symbol.name !== fileName.substring(0, fileName.lastIndexOf('.'));
   }
 }
