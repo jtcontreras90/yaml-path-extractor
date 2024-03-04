@@ -19,24 +19,26 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"configuration":{
+		"configuration": {
 			"title": "Yaml Path Extractor",
 			"properties": {
-				"yamlPathExtractor.pathSeparator":{
+				"yamlPathExtractor.pathSeparator": {
 					"type": "string",
 					"default": ".",
 					"markdownDescription": "String used to separate the path parts. For example, 'path **.** to **.** your **.** key'"
 				},
-				"yamlPathExtractor.ignoreFilenameRoot":{
+				"yamlPathExtractor.ignoreFilenameRoot": {
 					"type": "boolean",
 					"default": true,
-					"enum": [true, false],
+					"enum": [
+						true,
+						false
+					],
 					"markdownDescription": "Ignore the root key if it matches the file name. This is usefull for I18n on Ruby on Rails.",
 					"enumDescriptions": [
 						"Ignore the root key if it matches the file name. Example: /en.yml -> en: key: value -> key.value",
 						"Don't ignore the root key if it matches the file name. Example: /en.yml -> en: key: value -> en.key.value"
 					]
-
 				}
 			}
 		},
@@ -71,16 +73,12 @@
 		"@types/mocha": "^10.0.1",
 		"@types/node": "^12.11.7",
 		"@types/vscode": "^1.77.0",
-		"eslint": "^6.8.0",
-		"@typescript-eslint/parser": "^2.18.0",
 		"@typescript-eslint/eslint-plugin": "^2.18.0",
+		"@typescript-eslint/parser": "^2.18.0",
+		"@vscode/test-electron": "^2.3.0",
+		"eslint": "^6.8.0",
 		"glob": "^7.1.6",
 		"mocha": "^10.2.0",
-		"typescript": "^5.0.4",
-		"@vscode/test-electron": "^2.3.0"
-	},
-	"dependencies": {
-		"@types/clipboardy": "^1.1.0",
-		"clipboardy": "^1.2.3"
+		"typescript": "^5.0.4"
 	}
 }
