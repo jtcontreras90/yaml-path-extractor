@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as clipboardy from 'clipboardy';
 import { YamlKeyExtractor } from './yaml_key_extractor';
 export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('extension.extractKey', async () => {
@@ -12,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const extractor = new YamlKeyExtractor(document, position);
 		await extractor.extractYamlKey();
 		let fullPath = extractor.fullPath();
-		clipboardy.writeSync(fullPath);
+		await vscode.env.clipboard.writeText(fullPath);
 		vscode.window.showInformationMessage(`'${fullPath}' copied to your clipboard`);
 	});
 
